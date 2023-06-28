@@ -40,7 +40,6 @@ class ImportFile extends Command
             $this->info('File import job has been queued');
             return 0;
         } catch (\Exception $e) {
-            dd($e->getMessage());
             $this->error($e->getMessage());
             return 1;
         }
