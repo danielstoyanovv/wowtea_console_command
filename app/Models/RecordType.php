@@ -10,7 +10,8 @@ class RecordType extends Model
     use HasFactory;
 
     protected $fillable = [
-        'type'
+        'type',
+        'number_row'
     ];
 
     public function recordData()

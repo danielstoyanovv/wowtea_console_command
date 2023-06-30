@@ -1,20 +1,14 @@
 <?php
 
-
 namespace App\Services;
+
+use App\Jobs\ImportFileJob;
+use Illuminate\Support\Facades\File;
 
 class FileImportService
 {
-    protected $importedRecordRepository;
-
-    public function __construct(\App\Repositories\ImportedRecordRepository $importedRecordRepository)
+    public function __construct(private \App\Repositories\ImportedRecordRepository $importedRecordRepository)
     {
-        $this->importedRecordRepository = $importedRecordRepository;
-    }
-
-    public function import()
-    {
-
     }
 
     /**
@@ -24,12 +18,12 @@ class FileImportService
      */
     public function queueImport(string $pathToFile, int $fileId)
     {
-        var_dump($fileId);
-        var_dump($pathToFile);
-    }
+        $fileContent = File::get($pathToFile);
+        $content = explode("\n", $fileContent);
 
-    public function parseLine()
-    {
-
+        foreach ($content as $lineItemString) {
+            $data = explode("    ", $lineItemString);
+            ImportFileJob::dispatch($data, $fileId, $this->importedRecordRepository);
+        }
     }
 }

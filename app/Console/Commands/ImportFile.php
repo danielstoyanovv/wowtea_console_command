@@ -24,7 +24,6 @@ class ImportFile extends Command
     public function __construct(private FileImportService $fileImportService)
     {
         parent::__construct();
-        $this->fileImportService = $fileImportService;
     }
 
     /**
@@ -36,13 +35,16 @@ class ImportFile extends Command
         $fileId = $this->argument('id');
 
         try {
-            $this->fileImportService->queueImport($pathToFile, $fileId);
-            $this->info('File import job has been queued');
-            return 0;
+            if (is_file($pathToFile)) {
+                $this->fileImportService->queueImport($pathToFile, $fileId);
+                $this->info('File import job has been queued');
+                return 0;
+            }
+            $this->error('Please use a real file');
+            return 1;
         } catch (\Exception $e) {
             $this->error($e->getMessage());
             return 1;
         }
-
     }
 }

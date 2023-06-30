@@ -5,7 +5,9 @@ namespace App\Repositories;
 interface ImportedRecordRepositoryInterface
 {
     /**
-     * @return array
+     * @param array $data
+     * @param int $fileId
+     * @return void
      */
-    public function getData(): array;
+    public function save(array $data, int $fileId): void;
 }
