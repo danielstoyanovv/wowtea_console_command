@@ -20,10 +20,13 @@ class FileImportService
     {
         $fileContent = File::get($pathToFile);
         $content = explode("\n", $fileContent);
+        $chunks = array_chunk($content, 1000);
 
-        foreach ($content as $lineItemString) {
-            $data = explode("    ", $lineItemString);
-            ImportFileJob::dispatch($data, $fileId, $this->importedRecordRepository);
+        foreach ($chunks as $chunk) {
+            foreach ($chunk as $item) {
+                $data = explode("    ", $item);
+                ImportFileJob::dispatch($data, $fileId, $this->importedRecordRepository);
+            }
         }
     }
 }
